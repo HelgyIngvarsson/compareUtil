@@ -1,4 +1,4 @@
-package srvice;
+package service;
 
 import application.Connector;
 
@@ -6,9 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,11 +18,21 @@ public class DBService {
 
     private ResultSet resultSet;
 
+    private String user;
+
+    private String password;
+
+    public DBService(String user, String password)
+    {
+        this.user = user;
+        this.password = password;
+    }
+
     private PreparedStatement preparedStatement;
 
-     public Map<String,Integer> getAllPath() throws SQLException {
+     public Map<String,Integer> getAllPath() throws SQLException, ClassNotFoundException {
 
-        statement = Connector.getConnection().createStatement();
+        statement =new Connector(user, password).getConnection().createStatement();
 
         resultSet = statement.executeQuery("SELECT id,path FROM mapper_sound");
 
@@ -37,9 +45,8 @@ public class DBService {
         return pathMap;
     }
 
-    public Integer getMappId(Integer audioId)throws SQLException
-    {
-        statement = Connector.getConnection().createStatement();
+    public Integer getMappId(Integer audioId) throws SQLException, ClassNotFoundException {
+        statement =new Connector(user, password).getConnection().createStatement();
 
         resultSet = statement.executeQuery(
                 "Select mapp_audio_id FROM audio WHERE id="+audioId);
@@ -49,29 +56,27 @@ public class DBService {
         return resultSet.getInt("mapp_audio_id");
     }
 
-    public void removeMapper(Integer mapperId)throws SQLException
-    {
+    public void removeMapper(Integer mapperId) throws SQLException, ClassNotFoundException {
         preparedStatement =
-                Connector.getConnection().prepareStatement(
+                new Connector(user, password).getConnection().prepareStatement(
                         "DELETE FROM mapper_sound WHERE id=?");
         preparedStatement.setInt(1,mapperId);
         preparedStatement.execute();
     }
 
-    public void changeMapper(Integer audioId, Integer mapperId)throws SQLException
-    {
+    public void changeMapper(Integer audioId, Integer mapperId) throws SQLException, ClassNotFoundException {
         //hold old mapper id for remove
-        Integer oldMapper = new DBService().getMappId(audioId);
+        Integer oldMapper = new DBService(user, password).getMappId(audioId);
         //update
         preparedStatement =
-                Connector.getConnection().prepareStatement(
+                new Connector(user, password).getConnection().prepareStatement(
                         "UPDATE audio SET mapp_audio_id= ? WHERE id=?");
         preparedStatement.setInt(1,mapperId);
         preparedStatement.setInt(2,audioId);
         preparedStatement.execute();
 
         //remove old mapper
-        new DBService().removeMapper(oldMapper);
+        new DBService(user, password).removeMapper(oldMapper);
     }
 
 }

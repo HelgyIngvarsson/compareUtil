@@ -2,33 +2,28 @@ package application;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 /**
  * Created Ghavrilin Oleg  06.06.2017.
  */
 public class Connector {
 
-    private static Connection connection;
+    private Connection connection;
 
     private static final String URL ="jdbc:mysql://localhost:3306/greenapp";
-    private static final String USER ="root";
-    private static final String PASSWORD ="masterkey";
 
-    static {
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            connection = DriverManager.getConnection(URL, USER, PASSWORD);
-        }catch (Exception ex)
-        {
-            System.out.print(ex.getMessage());
-        }
+    public Connector(String user, String password) throws ClassNotFoundException, SQLException
+    {
+        Class.forName("com.mysql.jdbc.Driver");
+        connection = DriverManager.getConnection(URL, user, password);
     }
 
-    public static Connection getConnection() {
+    public Connection getConnection() {
         return connection;
     }
 
-    public static void setConnection(Connection connection) {
-        Connector.connection = connection;
+    public void setConnection(Connection connection) {
+        this.connection = connection;
     }
 }

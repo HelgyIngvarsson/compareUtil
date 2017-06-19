@@ -34,11 +34,36 @@ public class CompareMP3 {
     //true if audio1 == audio2
     private static Boolean  compareTags(Tags audio1,Tags audio2)
     {
-        if(audio1.getAuthor().equals(audio2.getAuthor())&&
-                audio1.getAlbum().equals(audio2.getAlbum())&&
-                audio1.getName().equals(audio2.getName())&&
-                audio1.getYear().equals(audio2.getYear())&&
-                audio1.getComment().equals(audio2.getComment()))
+        if(audio1.getAuthor().equals(audio2.getAuthor())
+                &&
+                audio1.getAlbum().equals(audio2.getAlbum())
+                &&
+                audio1.getName().equals(audio2.getName())
+                &&
+                audio1.getYear().equals(audio2.getYear())
+                &&
+                audio1.getComment().equals(audio2.getComment())
+                &&!
+                audio1.getComment().equals("")
+                &&!
+                audio2.getComment().equals("")
+                &&!
+                audio1.getAlbum().equals("")
+                &&!
+                audio2.getAlbum().equals("")
+                &&!
+                audio1.getName().equals("")
+                &&!
+                audio2.getName().equals("")
+                &&!
+                audio1.getAuthor().equals("")
+                &&!
+                audio2.getAuthor().equals("")
+                &&!
+                audio1.getYear().equals("")
+                &&!
+                audio2.getYear().equals("")
+                )
         {return true;}
         return false;
     }

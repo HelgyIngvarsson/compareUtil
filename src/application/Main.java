@@ -1,7 +1,7 @@
 package application;
 
 import object.Tags;
-import srvice.DBService;
+import service.DBService;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -12,9 +12,11 @@ import java.util.Map;
  */
 public class Main {
 
-    public static void main(String[] args) throws IOException, SQLException {
+    public static void main(String[] args) throws IOException, SQLException, ClassNotFoundException {
         Integer audioId = Integer.parseInt(args[0]);
         String url = args[1];
+        String user = args[2];
+        String password = args[3];
 /*
         Integer audioId = 47;
         String url = "D://sound_memory//sound32.mp3";*/
@@ -23,9 +25,9 @@ public class Main {
 
         CompareMP3 compareMP3 = new CompareMP3();
 
-        Map<String,Integer> mapperMap= new DBService().getAllPath();
+        Map<String,Integer> mapperMap= new DBService(user, password).getAllPath();
 
-        Integer owmMappId = new DBService().getMappId(audioId);
+        Integer owmMappId = new DBService(user, password).getMappId(audioId);
 
         // delete from map value of our mapperSound
         for (Map.Entry<String,Integer> entry : mapperMap.entrySet()) {
@@ -37,7 +39,7 @@ public class Main {
         Integer mappId = compareMP3.compare(url,audio, mapperMap);
 
         if(mappId!=null)
-            new DBService().changeMapper(audioId, mappId);
+            new DBService(user, password).changeMapper(audioId, mappId);
     }
     }
 
